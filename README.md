@@ -46,5 +46,6 @@ The app stores its local config, poster cache, and catalog under:
   - `凉宫春日的忧郁&消失`
 - Existing metadata is reused on rescans unless the folder name changes or you trigger a refresh scan from Settings.
 
-### Code of this project is purly written by AI. I just did the debugging on my computer.
+## Usage of AI
+Code of this project was purly written by AI (ChatGPT Codex and GitHub Co-Pilot). I just debugged the program on my computer.
 Prompt will be put on shortly after I finish tidying-up.
