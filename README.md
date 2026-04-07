@@ -47,4 +47,4 @@ The app stores its local config, poster cache, and catalog under:
 - Existing metadata is reused on rescans unless the folder name changes or you trigger a refresh scan from Settings.
 
 ### Code of this project is purly written by AI. I just did the debugging on my computer.
-Prompt will be put on shortly after I finishing tidying-up.
+Prompt will be put on shortly after I finish tidying-up.
