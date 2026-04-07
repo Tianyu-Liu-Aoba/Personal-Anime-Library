@@ -14,6 +14,7 @@
         <div>
           <p class="eyebrow">Preferences</p>
           <h1>Settings</h1>
+          <p class="eyebrow-note">These settings are saved locally and apply immediately. Use Scan Now to start a library scan.</p>
         </div>
         <button class="pill-button tonal" id="closeButton">Close</button>
       </header>
@@ -21,7 +22,10 @@
       <section class="settings-section panel subtle">
         <div class="section-heading">
           <h2>Appearance</h2>
-          <p>Choose the tone of the library interface.</p>
+          <div>
+            <p>Choose the tone of the library interface.</p>
+            <p class="section-note">Customize the theme, fonts, and gradient colors for light and dark mode. Save only persists your settings; use Scan Now to launch a library scan.</p>
+          </div>
         </div>
         <div class="segment-shell" id="themeModeSegment"></div>
         <div class="segment-shell" id="accentSegment"></div>
@@ -41,6 +45,14 @@
           <label class="field-shell">
             <span>Background End</span>
             <input id="backgroundEndInput" type="color" />
+          </label>
+          <label class="field-shell">
+            <span>Dark Background Start</span>
+            <input id="backgroundStartDarkInput" type="color" />
+          </label>
+          <label class="field-shell">
+            <span>Dark Background End</span>
+            <input id="backgroundEndDarkInput" type="color" />
           </label>
         </div>
       </section>

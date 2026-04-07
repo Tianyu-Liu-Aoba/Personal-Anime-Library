@@ -35,26 +35,26 @@
             <p id="libraryStats">0 titles</p>
           </div>
           <section class="filter-group collapsible-filter" id="yearsFilterSection">
-            <button class="filter-group-toggle" id="yearsToggleButton" type="button" aria-expanded="true">
-              <span>Years</span>
-              <span class="filter-toggle-indicator" id="yearsToggleIndicator">▾</span>
-            </button>
+            <div class="filter-group-header">
+              <button class="filter-group-toggle" id="yearsToggleButton" type="button" aria-expanded="true">
+                <span>Years</span>
+                <span class="filter-toggle-indicator" id="yearsToggleIndicator">▾</span>
+              </button>
+              <button class="text-button" id="clearYearsButton">Clear</button>
+            </div>
             <div class="filter-group-body" id="yearsGroupBody">
-              <div class="filter-group-header">
-                <button class="text-button" id="clearYearsButton">Clear</button>
-              </div>
               <div class="chip-stack" id="yearChips"></div>
             </div>
           </section>
           <section class="filter-group collapsible-filter" id="tagsFilterSection">
-            <button class="filter-group-toggle" id="tagsToggleButton" type="button" aria-expanded="true">
-              <span>Browse Tags</span>
-              <span class="filter-toggle-indicator" id="tagsToggleIndicator">▾</span>
-            </button>
+            <div class="filter-group-header">
+              <button class="filter-group-toggle" id="tagsToggleButton" type="button" aria-expanded="true">
+                <span>Browse Tags</span>
+                <span class="filter-toggle-indicator" id="tagsToggleIndicator">▾</span>
+              </button>
+              <button class="text-button" id="clearTagsButton">Clear</button>
+            </div>
             <div class="filter-group-body" id="tagsGroupBody">
-              <div class="filter-group-header">
-                <button class="text-button" id="clearTagsButton">Clear</button>
-              </div>
               <div class="chip-stack" id="tagChips"></div>
             </div>
           </section>

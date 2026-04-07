@@ -7,6 +7,8 @@ const settingsState = {
   fontDisplay: '"Bahnschrift", "Segoe UI", sans-serif',
   backgroundStart: "#fff5ef",
   backgroundEnd: "#fff0e6",
+  backgroundStartDark: "#0f0f0f",
+  backgroundEndDark: "#252525",
 };
 
 const themeOptions = [
@@ -49,6 +51,14 @@ document.addEventListener("DOMContentLoaded", () => {
     settingsState.backgroundEnd = event.target.value || "#fff0e6";
     applyAppearance();
   });
+  document.getElementById("backgroundStartDarkInput").addEventListener("input", (event) => {
+    settingsState.backgroundStartDark = event.target.value || "#0f0f0f";
+    applyAppearance();
+  });
+  document.getElementById("backgroundEndDarkInput").addEventListener("input", (event) => {
+    settingsState.backgroundEndDark = event.target.value || "#252525";
+    applyAppearance();
+  });
   loadSettings();
 });
 
@@ -62,6 +72,8 @@ async function loadSettings() {
   settingsState.fontDisplay = payload.config.appearance?.font_display || settingsState.fontDisplay;
   settingsState.backgroundStart = payload.config.appearance?.background_start || settingsState.backgroundStart;
   settingsState.backgroundEnd = payload.config.appearance?.background_end || settingsState.backgroundEnd;
+  settingsState.backgroundStartDark = payload.config.appearance?.background_start_dark || settingsState.backgroundStartDark;
+  settingsState.backgroundEndDark = payload.config.appearance?.background_end_dark || settingsState.backgroundEndDark;
   applyAppearance();
   renderSegments();
   renderPaths();
@@ -69,6 +81,8 @@ async function loadSettings() {
   document.getElementById("displayFontInput").value = settingsState.fontDisplay;
   document.getElementById("backgroundStartInput").value = settingsState.backgroundStart;
   document.getElementById("backgroundEndInput").value = settingsState.backgroundEnd;
+  document.getElementById("backgroundStartDarkInput").value = settingsState.backgroundStartDark;
+  document.getElementById("backgroundEndDarkInput").value = settingsState.backgroundEndDark;
   document.getElementById("malClientIdInput").value = payload.config.providers?.mal_client_id || "";
   document.getElementById("tmdbApiKeyInput").value = payload.config.providers?.tmdb_api_key || "";
   document.getElementById("tmdbTokenInput").value = payload.config.providers?.tmdb_read_access_token || "";
@@ -79,7 +93,12 @@ async function loadSettings() {
 function applyAppearance() {
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const theme = settingsState.themeMode === "system" ? (prefersDark ? "dark" : "light") : settingsState.themeMode;
-  const colors = buildBackgroundPalette(settingsState.backgroundStart, settingsState.backgroundEnd);
+  const colors = buildBackgroundPalette(
+    settingsState.backgroundStart,
+    settingsState.backgroundEnd,
+    settingsState.backgroundStartDark,
+    settingsState.backgroundEndDark
+  );
   document.documentElement.dataset.theme = theme;
   document.body.dataset.theme = theme;
   document.documentElement.dataset.accent = settingsState.accent;
@@ -95,15 +114,16 @@ function applyAppearance() {
   document.documentElement.style.setProperty("--bg-end-dark", colors.darkEnd);
   document.documentElement.style.setProperty("--bg-spot-a-dark", colors.darkSpotA);
   document.documentElement.style.setProperty("--bg-spot-b-dark", colors.darkSpotB);
-  document.documentElement.style.setProperty("--surface", colors.surface);
-  document.documentElement.style.setProperty("--surface-strong", colors.surfaceStrong);
-  document.documentElement.style.setProperty("--surface-subtle", colors.surfaceSubtle);
-  document.documentElement.style.setProperty("--line", colors.line);
+  const isDarkTheme = theme === "dark";
+  document.documentElement.style.setProperty("--surface", isDarkTheme ? colors.surfaceDark : colors.surface);
+  document.documentElement.style.setProperty("--surface-strong", isDarkTheme ? colors.surfaceStrongDark : colors.surfaceStrong);
+  document.documentElement.style.setProperty("--surface-subtle", isDarkTheme ? colors.surfaceSubtleDark : colors.surfaceSubtle);
+  document.documentElement.style.setProperty("--line", isDarkTheme ? colors.lineDark : colors.line);
   document.documentElement.style.setProperty("--surface-dark", colors.surfaceDark);
   document.documentElement.style.setProperty("--surface-strong-dark", colors.surfaceStrongDark);
   document.documentElement.style.setProperty("--surface-subtle-dark", colors.surfaceSubtleDark);
   document.documentElement.style.setProperty("--line-dark", colors.lineDark);
-  document.documentElement.style.setProperty("--overlay-backdrop", colors.overlayBackdrop);
+  document.documentElement.style.setProperty("--overlay-backdrop", isDarkTheme ? colors.overlayBackdropDark : colors.overlayBackdrop);
   document.documentElement.style.setProperty("--overlay-backdrop-dark", colors.overlayBackdropDark);
 }
 
@@ -177,10 +197,12 @@ async function saveSettings(forceScan = false) {
     font_display: settingsState.fontDisplay,
     background_start: settingsState.backgroundStart,
     background_end: settingsState.backgroundEnd,
+    background_start_dark: settingsState.backgroundStartDark,
+    background_end_dark: settingsState.backgroundEndDark,
     mal_client_id: document.getElementById("malClientIdInput").value.trim(),
     tmdb_api_key: document.getElementById("tmdbApiKeyInput").value.trim(),
     tmdb_read_access_token: document.getElementById("tmdbTokenInput").value.trim(),
-    scan_after_save: forceScan || pathsChanged,
+    scan_after_save: forceScan,
     refresh_metadata: forceScan,
   };
   const result = await api("/api/settings/save", { method: "POST", body: payload });
@@ -188,9 +210,7 @@ async function saveSettings(forceScan = false) {
   const message = document.getElementById("saveMessage");
   message.textContent = forceScan
     ? "Settings saved and a refresh scan started."
-    : pathsChanged
-      ? "Settings saved. A scan started because the library paths changed."
-      : "Settings saved.";
+    : "Settings saved.";
   triggerMessageFade(message);
   if (window.opener) {
     window.opener.postMessage({ type: "settings-saved" }, "*");
@@ -244,14 +264,14 @@ function triggerMessageFade(element) {
   element.classList.add("message-fade");
 }
 
-function buildBackgroundPalette(startHex, endHex) {
+function buildBackgroundPalette(startHex, endHex, darkStartHex, darkEndHex) {
   const start = normalizeHexColor(startHex, "#fff5ef");
   const end = normalizeHexColor(endHex, "#fff0e6");
   const mid = mixHexColors(start, end, 0.5);
   const lightBase = mixHexColors(start, end, 0.42);
-  const darkStart = darkenHex(start, 0.82);
-  const darkMid = darkenHex(mid, 0.88);
-  const darkEnd = darkenHex(end, 0.9);
+  const darkStart = normalizeHexColor(darkStartHex, darkenHex(start, 0.92));
+  const darkEnd = normalizeHexColor(darkEndHex, darkenHex(end, 0.96));
+  const darkMid = mixHexColors(darkStart, darkEnd, 0.5);
   const darkBase = mixHexColors(darkStart, darkEnd, 0.45);
   return {
     start,
@@ -262,18 +282,18 @@ function buildBackgroundPalette(startHex, endHex) {
     darkStart,
     darkMid,
     darkEnd,
-    darkSpotA: hexToRgba(darkenHex(start, 0.38), 0.28),
-    darkSpotB: hexToRgba(darkenHex(end, 0.42), 0.22),
+    darkSpotA: hexToRgba(darkenHex(darkStart, 0.52), 0.28),
+    darkSpotB: hexToRgba(darkenHex(darkEnd, 0.56), 0.22),
     surface: hexToRgba(mixHexColors(lightBase, "#ffffff", 0.8), 0.8),
     surfaceStrong: hexToRgba(mixHexColors(lightBase, "#ffffff", 0.9), 0.9),
     surfaceSubtle: hexToRgba(mixHexColors(start, "#ffffff", 0.72), 0.62),
     line: hexToRgba(darkenHex(lightBase, 0.7), 0.16),
-    surfaceDark: hexToRgba(darkBase, 0.84),
-    surfaceStrongDark: hexToRgba(mixHexColors(darkStart, darkEnd, 0.35), 0.92),
-    surfaceSubtleDark: hexToRgba(mixHexColors(darkMid, darkEnd, 0.4), 0.72),
-    lineDark: hexToRgba(mixHexColors(start, end, 0.45), 0.14),
+    surfaceDark: hexToRgba(darkBase, 0.92),
+    surfaceStrongDark: hexToRgba(mixHexColors(darkStart, darkEnd, 0.35), 0.96),
+    surfaceSubtleDark: hexToRgba(mixHexColors(darkMid, darkEnd, 0.4), 0.8),
+    lineDark: hexToRgba(mixHexColors(darkStart, darkEnd, 0.45), 0.12),
     overlayBackdrop: hexToRgba(darkenHex(lightBase, 0.78), 0.34),
-    overlayBackdropDark: hexToRgba(mixHexColors(darkStart, darkEnd, 0.5), 0.56),
+    overlayBackdropDark: hexToRgba(mixHexColors(darkStart, darkEnd, 0.5), 0.68),
   };
 }
 
