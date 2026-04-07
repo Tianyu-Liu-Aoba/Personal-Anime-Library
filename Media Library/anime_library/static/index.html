@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Anime Library</title>
+    <link rel="stylesheet" href="/styles.css?v=20260406e" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="app-shell" id="appShell">
+      <header class="top-bar panel">
+        <div class="brand-block">
+          <button class="icon-button" id="filterToggle" title="Toggle filters" aria-expanded="true">☰</button>
+          <div>
+            <h1>Anime Library</h1>
+          </div>
+        </div>
+        <div class="header-actions">
+          <label class="search-shell">
+            <input id="searchInput" type="search" placeholder="Search" aria-label="Search" />
+          </label>
+          <div class="header-button-row">
+            <button class="pill-button tonal" id="scanButton">Scan Library</button>
+            <button class="icon-button gear-button" id="settingsButton" title="Open settings" aria-label="Open settings">⚙</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="layout-shell" id="layoutShell">
+        <aside class="filter-drawer panel" id="filterDrawer">
+          <div class="section-heading filter-heading">
+            <h2>Tags</h2>
+            <p id="libraryStats">0 titles</p>
+          </div>
+          <section class="filter-group collapsible-filter" id="yearsFilterSection">
+            <button class="filter-group-toggle" id="yearsToggleButton" type="button" aria-expanded="true">
+              <span>Years</span>
+              <span class="filter-toggle-indicator" id="yearsToggleIndicator">▾</span>
+            </button>
+            <div class="filter-group-body" id="yearsGroupBody">
+              <div class="filter-group-header">
+                <button class="text-button" id="clearYearsButton">Clear</button>
+              </div>
+              <div class="chip-stack" id="yearChips"></div>
+            </div>
+          </section>
+          <section class="filter-group collapsible-filter" id="tagsFilterSection">
+            <button class="filter-group-toggle" id="tagsToggleButton" type="button" aria-expanded="true">
+              <span>Browse Tags</span>
+              <span class="filter-toggle-indicator" id="tagsToggleIndicator">▾</span>
+            </button>
+            <div class="filter-group-body" id="tagsGroupBody">
+              <div class="filter-group-header">
+                <button class="text-button" id="clearTagsButton">Clear</button>
+              </div>
+              <div class="chip-stack" id="tagChips"></div>
+            </div>
+          </section>
+        </aside>
+
+        <main class="main-stage">
+          <section class="setup-view panel hidden" id="setupView">
+            <div class="setup-copy">
+              <p class="eyebrow">First-time setup</p>
+              <h2>Choose the folders that hold your anime.</h2>
+              <p>
+                This app scans the child folders inside each library path, extracts likely anime titles from the
+                folder names, cross-checks metadata from MyAnimeList, TMDB, and Bangumi, and builds a local web
+                gallery for Windows.
+              </p>
+            </div>
+            <div class="path-picker panel subtle">
+              <div class="section-heading">
+                <h3>Library paths</h3>
+                <p>Each selected folder is treated as a root that contains anime folders.</p>
+              </div>
+              <div class="path-list" id="setupPathList"></div>
+              <div class="button-row">
+                <button class="pill-button tonal" id="setupAddPathButton">Add Folder</button>
+                <button class="pill-button" id="setupStartButton">Save and Scan</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="library-view hidden" id="libraryView">
+            <section class="hero-card panel scan-banner-hidden" id="heroCard" aria-hidden="true">
+              <div>
+                <p class="eyebrow">Library update</p>
+                <h2 id="heroTitle">Updating library</h2>
+                <p id="heroSubtitle">
+                  Checking folders and refreshing titles.
+                </p>
+              </div>
+              <div class="status-cluster">
+                <div class="status-pill">
+                  <span class="status-label">Scan</span>
+                  <strong id="scanMessage">Idle</strong>
+                </div>
+                <div class="status-pill">
+                  <span class="status-label" id="secondaryStatusLabel">Progress</span>
+                  <strong id="visibleCount">0 items</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="gallery-view" id="galleryView">
+              <div class="poster-grid" id="posterGrid"></div>
+              <div class="empty-state hidden panel" id="emptyState">
+                <h3>No titles match the current filters.</h3>
+                <p>Try clearing a tag or year filter, or run a new scan after adding more library folders.</p>
+              </div>
+            </section>
+
+            <section class="advanced-panel panel subtle" id="advancedPanel">
+              <button class="advanced-toggle" id="advancedToggleButton" type="button" aria-expanded="false">
+                <span class="advanced-title">Advanced</span>
+                <span class="advanced-summary" id="advancedSummary">Sources and diagnostics</span>
+                <span class="filter-toggle-indicator" id="advancedToggleIndicator">▾</span>
+              </button>
+              <div class="advanced-body hidden" id="advancedBody">
+                <section class="advanced-block">
+                  <div class="section-heading">
+                    <h3>Sources</h3>
+                    <p>Configured metadata providers</p>
+                  </div>
+                  <div class="source-stack" id="sourceAvailability"></div>
+                </section>
+                <section class="advanced-block diagnostics-card" id="diagnosticsCard">
+                  <div class="section-heading">
+                    <h3>Diagnostics</h3>
+                    <p id="diagnosticsSummary">Scan details</p>
+                  </div>
+                  <p id="scanErrorText"></p>
+                  <pre class="log-panel compact" id="diagnosticsLogs"></pre>
+                </section>
+              </div>
+            </section>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="detail-overlay hidden" id="detailOverlay">
+      <div class="detail-backdrop" id="detailBackdrop"></div>
+      <section class="detail-modal panel" id="detailModal"></section>
+    </div>
+
+    <script src="/app.js?v=20260406e"></script>
+  </body>
+</html>

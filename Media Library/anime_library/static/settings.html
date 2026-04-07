@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Anime Library Settings</title>
+    <link rel="stylesheet" href="/styles.css?v=20260406e" />
+  </head>
+  <body class="settings-body">
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="settings-shell panel">
+      <header class="settings-header">
+        <div>
+          <p class="eyebrow">Preferences</p>
+          <h1>Settings</h1>
+        </div>
+        <button class="pill-button tonal" id="closeButton">Close</button>
+      </header>
+
+      <section class="settings-section panel subtle">
+        <div class="section-heading">
+          <h2>Appearance</h2>
+          <p>Choose the tone of the library interface.</p>
+        </div>
+        <div class="segment-shell" id="themeModeSegment"></div>
+        <div class="segment-shell" id="accentSegment"></div>
+        <div class="field-grid">
+          <label class="field-shell">
+            <span>Body Font Stack</span>
+            <input id="bodyFontInput" type="text" placeholder='"Trebuchet MS", "Segoe UI", sans-serif' />
+          </label>
+          <label class="field-shell">
+            <span>Display Font Stack</span>
+            <input id="displayFontInput" type="text" placeholder='"Bahnschrift", "Segoe UI", sans-serif' />
+          </label>
+          <label class="field-shell">
+            <span>Background Start</span>
+            <input id="backgroundStartInput" type="color" />
+          </label>
+          <label class="field-shell">
+            <span>Background End</span>
+            <input id="backgroundEndInput" type="color" />
+          </label>
+        </div>
+      </section>
+
+      <section class="settings-section panel subtle">
+        <div class="section-heading">
+          <h2>Library Paths</h2>
+          <p>Adding a folder triggers a scan across all configured roots.</p>
+        </div>
+        <div class="path-list" id="settingsPathList"></div>
+        <div class="button-row">
+          <button class="pill-button tonal" id="addPathButton">Add Folder</button>
+        </div>
+      </section>
+
+      <section class="settings-section panel subtle">
+        <div class="section-heading">
+          <h2>Metadata Sources</h2>
+          <p>Bangumi works without a key. TMDB needs an API key or read access token. MAL can use a client ID.</p>
+        </div>
+        <div class="field-grid">
+          <label class="field-shell">
+            <span>MAL Client ID</span>
+            <input id="malClientIdInput" type="text" placeholder="Optional" />
+          </label>
+          <label class="field-shell">
+            <span>TMDB API Key</span>
+            <input id="tmdbApiKeyInput" type="password" placeholder="Optional" />
+          </label>
+          <label class="field-shell wide">
+            <span>TMDB Read Access Token</span>
+            <input id="tmdbTokenInput" type="password" placeholder="Optional" />
+          </label>
+        </div>
+      </section>
+
+      <section class="settings-section panel subtle">
+        <div class="section-heading">
+          <h2>Diagnostics</h2>
+          <p>Recent log output from the latest scans and playback actions.</p>
+        </div>
+        <div class="path-row">
+          <div>
+            <strong>Log file</strong>
+            <p id="logPathLabel">Loading...</p>
+          </div>
+          <button class="pill-button tonal" id="refreshLogsButton">Refresh Logs</button>
+        </div>
+        <pre class="log-panel" id="logPanel">Loading logs...</pre>
+      </section>
+
+      <footer class="settings-footer">
+        <p id="saveMessage">Changes stay local to this PC.</p>
+        <div class="button-row">
+          <button class="pill-button tonal" id="scanNowButton">Scan Now</button>
+          <button class="pill-button" id="saveButton">Save Settings</button>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/settings.js?v=20260406e"></script>
+  </body>
+</html>
